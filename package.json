@@ -1,0 +1,24 @@
+{
+  "name": "cms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JairGH/CMS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JairGH/CMS/issues"
+  },
+  "dependencies": {
+    "inquirer": "^8.2.4",
+    "mysql2": "^3.3.3"
+  },
+  "homepage": "https://github.com/JairGH/CMS#readme"
+}
