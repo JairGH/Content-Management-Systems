@@ -41,112 +41,96 @@ function init() {
         viewDepartments();
       }
       if (data.firstQ === "Add Employee") {
-        const addValues = ({ firstName, lastName, role, manager }) => {
-          let role_id;
-          if (role === "Sales") {
-            role_id = 1;
-          }
-          if (role === "Engineering") {
-            role_id = 2;
-          }
-          if (role === "Finance") {
-            role_id = 3;
-          }
-          if (role === "Legal") {
-            role_id = 4;
-          }
-          if (role === "Services") {
-            role_id = 5;
-          }
-          db.query(
-            `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${firstName}', '${lastName}', ${role_id}, '${manager}')`
-          );
-        };
-        inquirer
-          .prompt([
-            {
-              type: "input",
-              name: "firstName",
-              message: "Enter new employees first name:",
-            },
-            {
-              type: "input",
-              name: "lastName",
-              message: "Enter new employees last name:",
-            },
-            {
-              type: "list",
-              name: "role",
-              message: "Enter new employees role:",
-              choices: ["Sales", "Engineering", "Finance", "Legal", "Service"],
-            },
-            {
-              type: "input",
-              name: "manager",
-              message: "Enter new employees manager:",
-            },
-          ])
-          .then((answers) => {
-            // Is this even doing something?
-            const insertData = addValues(answers);
-            console.table(insertData);
-            console.table("Added Employee Into The Database");
-          });
+        db.query("SELECT * FROM role", (err, res) => {
+          const roleChoices = res.map(({ id, title }) => ({
+            value: id,
+            name: title,
+          }));
+          const addValues = ({ firstName, lastName, role, manager }) => {
+            db.query(
+              `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${firstName}', '${lastName}', ${role}, '${manager}')`
+            );
+          };
+          inquirer
+            .prompt([
+              {
+                type: "input",
+                name: "firstName",
+                message: "Enter new employees first name:",
+              },
+              {
+                type: "input",
+                name: "lastName",
+                message: "Enter new employees last name:",
+              },
+              {
+                type: "list",
+                name: "role",
+                message: "Enter new employees role:",
+                choices: roleChoices,
+              },
+              {
+                type: "input",
+                name: "manager",
+                message: "Enter new employees manager:",
+              },
+            ])
+            .then((answers) => {
+              // Is this even doing something?
+              const insertData = addValues(answers);
+              console.table(insertData);
+              console.table("Added Employee Into The Database");
+              init();
+            });
+        });
       }
       if (data.firstQ === "Update Employee Role") {
         // Grab by ID
       }
       if (data.firstQ === "Add Role") {
-        const addRole = ({ title, salary, department }) => {
-          let department_id;
-          if (department === "Sales") {
-            department_id = 1;
-          }
-          if (department === "Engineering") {
-            department_id = 2;
-          }
-          if (department === "Finance") {
-            department_id = 3;
-          }
-          if (department === "Legal") {
-            department_id = 4;
-          }
-          if (department === "Services") {
-            department_id = 5;
-          }
-          db.query(
-            `INSERT INTO role (title, salary, department_id) VALUES ('${title}', ${salary}, ${department_id})`
-          );
-          console.log(typeof department_id);
-        };
-        inquirer
-          .prompt([
-            {
-              type: "input",
-              name: "title",
-              message: "What is the name of the role?",
-            },
-            {
-              type: "input",
-              name: "salary",
-              message: "What is the salary of the role?",
-            },
-            {
-              type: "list",
-              name: "department",
-              message: "Which department does the role belong to?",
-              choices: ["Sales", "Engineering", "Finance", "Legal", "Service"],
-            },
-          ])
-          .then((answers) => {
-            const insertRole = addRole(answers);
-            console.table(insertRole);
-            init();
-          });
+        db.query("SELECT * FROM department", (err, res) => {
+          const departmentChoices = res.map(({ id, department_name }) => ({
+            value: id,
+            name: department_name,
+          }));
+
+          inquirer
+            .prompt([
+              {
+                type: "input",
+                name: "title",
+                message: "What is the name of the role?",
+              },
+              {
+                type: "input",
+                name: "salary",
+                message: "What is the salary of the role?",
+              },
+              {
+                type: "list",
+                name: "department",
+                message: "Which department does the role belong to?",
+                choices: departmentChoices,
+              },
+            ])
+            .then((answers) => {
+              const addRole = ({ title, salary, department }) => {
+                db.query(
+                  `INSERT INTO role (title, salary, department_id) VALUES ('${title}', ${salary}, ${department})`
+                );
+              };
+
+              const insertRole = addRole(answers);
+              console.table(insertRole);
+              console.table("Added Role Into The Database");
+              init();
+            });
+        });
       }
+
       if (data.firstQ === "Add Department") {
         const newDepartment = ({ department }) => {
-          console.log(department)
+          console.log(department);
           db.query(
             `INSERT INTO department (department_name) VALUES ('${department}')`
           );
@@ -161,6 +145,7 @@ function init() {
           ])
           .then((answers) => {
             const idk = newDepartment(answers);
+            init();
           });
       }
     });
@@ -183,12 +168,4 @@ function viewDepartments() {
     init();
   });
 }
-
-// function addEmployee() {
-//   const addValues = ({ firstName, lastName, role, manager }) =>
-//     db.query(
-//       `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${firstName}', '${lastName}', '${role}', '${manager}')`
-//     );
-// }
-
 init();

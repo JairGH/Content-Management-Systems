@@ -6,7 +6,7 @@ VALUES ("Sales"),
 -- 2
 ("Finance"), 
 -- 3
-("Legal"); 
+("Legal"),
 -- 4
  ("Services");
 -- 5
