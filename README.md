@@ -34,3 +34,7 @@
 ## Acknowledgments
 
 - Special thanks to the creators of Node.js, Inquirer, and MySQL for providing the necessary tools to build this application.
+
+- Walkthrough video below. 
+
+https://watch.screencastify.com/v/GkmVJNHdXdufhYn5oXi2 
